@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Trắc nghiệm KTDN Bài 2–3</title>
+<style>
+:root{
+  --bg:#f4f5f9; --card:#ffffff; --ink:#15172b; --ink2:#4a4e66; --muted:#767a92;
+  --line:#dfe1ea; --accent:#1b1f8a; --accent-ink:#ffffff; --accent-soft:#e9eafb;
+  --ok:#137a43; --ok-soft:#e5f5ec; --bad:#b42318; --bad-soft:#fdecea; --warn:#8a5a00; --warn-soft:#fff5dc;
+  --bar:#3a41c6; --track:#e6e7f0; --focus:#5b61ff;
+  --radius:14px; --shadow:0 1px 2px rgba(20,22,50,.06),0 4px 14px rgba(20,22,50,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1120; --card:#181b2e; --ink:#eceef8; --ink2:#b8bbd2; --muted:#8c90aa;
+    --line:#2b2f48; --accent:#8f95ff; --accent-ink:#0f1120; --accent-soft:#23264a;
+    --ok:#5fd394; --ok-soft:#14301f; --bad:#ff8a7f; --bad-soft:#3a1714; --warn:#f2c255; --warn-soft:#352a0c;
+    --bar:#8f95ff; --track:#2b2f48; --focus:#a9adff;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:16px 16px 120px}
+h1{font-size:1.35rem;line-height:1.3;margin:6px 0 2px}
+h2{font-size:1.1rem;margin:0 0 10px}
+h3{font-size:1rem;margin:0 0 6px}
+.sub{color:var(--ink2);margin:0 0 14px;font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0;box-shadow:var(--shadow)}
+label.f{display:block;font-size:.85rem;color:var(--ink2);margin:0 0 4px}
+input[type=text],input[type=password],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.grid3{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:620px){.grid3{grid-template-columns:2fr 1fr 1fr}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{font:inherit;font-weight:600;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;min-height:44px;cursor:pointer}
+button.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.seg label{flex:1 1 220px;display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.seg input{margin-top:5px;accent-color:var(--accent)}
+.seg small{display:block;color:var(--muted)}
+/* thanh tiến độ */
+.sticky{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 6px}
+.prog{display:flex;align-items:center;gap:12px}
+.prog .t{font-size:.9rem;color:var(--ink2);white-space:nowrap}
+.prog .tr{flex:1;height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.prog .fi{height:100%;width:0;background:var(--bar);border-radius:4px;transition:width .2s}
+/* câu hỏi */
+.q{scroll-margin-top:60px}
+.part{font-size:.85rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:22px 4px 4px}
+.q .num{display:inline-block;font-weight:700;color:var(--accent);margin-right:4px}
+.q .stem{margin:0 0 10px}
+.fig{margin:8px 0 12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:zoom-in;position:relative}
+.fig img{display:block;width:100%;height:auto}
+.fig .figscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.fig .hint{display:none;font-size:.75rem;color:#4a4e66;text-align:center;margin:4px 0 0;padding:0 32px}
+.fig.wide .hint{display:block}
+.fig .zoom{position:absolute;right:4px;bottom:4px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:rgba(20,22,50,.55);color:#fff;font-size:.85rem;border-radius:6px}
+.fig.small img{max-width:360px;margin:0 auto}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;min-height:48px}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .L{flex:0 0 28px;height:28px;border-radius:50%;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:var(--ink2)}
+.opt .tx{padding-top:2px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .L{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.graded .opt{cursor:default}
+.opt.isKey{border-color:var(--ok);background:var(--ok-soft)}
+.opt.isKey .L{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.isWrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.isWrong .L{background:var(--bad);border-color:var(--bad);color:#fff}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.tag.skip{background:var(--warn-soft);color:var(--warn)}
+.q.r-ok{border-left:5px solid var(--ok)}
+.q.r-bad{border-left:5px solid var(--bad)}
+.fb{margin-top:12px;padding:12px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:.95rem}
+.fb b.k{color:var(--ok)}
+.fb .cap{font-size:.85rem;color:var(--ink2);margin:4px 0 0}
+.gtag{font-size:.75rem;color:var(--muted);display:block;margin-bottom:4px}
+.submitbox{margin-top:16px}
+.warnmsg{color:var(--warn);background:var(--warn-soft);padding:10px 12px;border-radius:10px;margin:10px 0 0;font-size:.95rem}
+/* kết quả */
+.score{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score .big{font-size:2.6rem;font-weight:800;line-height:1;color:var(--accent)}
+.score .of{color:var(--ink2)}
+.pass{display:inline-block;margin-top:8px;font-weight:700;padding:6px 12px;border-radius:999px}
+.pass.y{background:var(--ok-soft);color:var(--ok)}
+.pass.n{background:var(--bad-soft);color:var(--bad)}
+.chart{display:grid;gap:12px;margin-top:6px}
+.bar .lab{display:flex;justify-content:space-between;gap:8px;font-size:.9rem}
+.bar .lab span:last-child{color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar .tr{height:14px;background:var(--track);border-radius:4px;margin-top:4px;position:relative}
+.bar .fi{height:100%;background:var(--bar);border-radius:4px;min-width:0}
+.bar .need{font-size:.75rem;font-weight:700;color:var(--bad);margin-left:6px}
+.bar .tick{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink2);opacity:.5;left:70%}
+.legend{font-size:.8rem;color:var(--muted);margin-top:8px}
+.wrong-list{display:grid;gap:8px;margin-top:4px}
+.wrong-list a{color:var(--accent)}
+details.how{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+details.how summary{cursor:pointer;font-weight:600}
+details.how ol{padding-left:20px;margin:10px 0 4px}
+details.how li{margin:6px 0}
+.note{font-size:.85rem;color:var(--ink2)}
+.ai-item{border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;background:var(--bg)}
+.ai-item h4{margin:0 0 8px;font-size:.95rem}
+.ai-item dl{margin:0}
+.ai-item dt{font-weight:700;font-size:.85rem;color:var(--accent);margin-top:8px}
+.ai-item dd{margin:2px 0 0}
+.ai-item pre,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:4px 0 0}
+.plan li{margin:8px 0}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-3px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{color:var(--bad);background:var(--bad-soft);padding:10px 12px;border-radius:10px;margin-top:10px}
+.okmsg{color:var(--ok);background:var(--ok-soft);padding:10px 12px;border-radius:10px;margin-top:10px}
+.hidden{display:none!important}
+/* phóng to hình */
+#lb{position:fixed;inset:0;background:rgba(10,12,25,.92);z-index:50;display:flex;flex-direction:column}
+#lb .bar2{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:#fff;font-size:.9rem}
+#lb .sc{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:10px}
+#lb img{background:#fff;border-radius:6px;display:block;margin:auto;max-width:none}
+#lb button{background:#fff;color:#111;border:0}
+/* tự kiểm tra */
+#selftest table{width:100%;border-collapse:collapse;font-size:.9rem}
+#selftest td,#selftest th{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+#selftest table{table-layout:fixed}#selftest td{overflow-wrap:anywhere}#selftest th:last-child,#selftest td:last-child{width:64px}
+.P{color:var(--ok);font-weight:700}.F{color:var(--bad);font-weight:700}
+.eyebrowrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:700;letter-spacing:.04em;color:var(--warn);background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);padding:3px 10px;border-radius:999px}
+.pill .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid currentColor}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cap-lab{display:block;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+#aiSetup h2{font-size:1.25rem;margin:0 0 6px}
+.keystate{font-size:.9rem;font-weight:600}
+.keystate.ok{color:var(--ok)} .keystate.bad{color:var(--bad)} .keystate.wait{color:var(--ink2);font-weight:400}
+footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:24px}
+@media print{
+  .sticky,.noprint,#aiSetup,#aiResult,details.how{display:none!important}
+  body{background:#fff;color:#000}
+  .card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Kiểm tra trắc nghiệm — Kiến trúc doanh nghiệp Bài 2–3</h1>
+    <p class="sub">Văn hóa, cấu trúc doanh nghiệp · Giá trị, rủi ro và chi phí của EA · 30 câu: Nhớ – Hiểu – Vận dụng. Chọn một phương án cho mỗi câu, bấm <b>Nộp bài</b> để chấm ngay (không cần mạng).</p>
+  </header>
+
+  <section class="card noprint" id="aiSetup">
+    <div class="eyebrowrow"><span class="pill"><span class="dot"></span>AI</span><span class="eyebrow">Thiết lập trước khi làm bài (tuỳ chọn)</span></div>
+    <h2>Trợ lý AI Gemini</h2>
+    <p class="note" style="margin:0">Nhập API key Gemini của riêng em để sau khi nộp bài có thể xem giải thích chi tiết và gợi ý ôn tập do AI soạn riêng cho em. Không bắt buộc — không có key vẫn chấm điểm, xem đáp án và lời giải bình thường.</p>
+    <details class="how" id="howKey" style="margin-top:12px">
+      <summary>Cách lấy API key Gemini miễn phí (3 bước)</summary>
+      <ol>
+        <li>Mở <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> ở tab mới, đăng nhập bằng tài khoản Google (lần đầu vào thì đồng ý điều khoản).</li>
+        <li>Bấm <b>"Create API key"</b>, chọn hoặc tạo một dự án khi được hỏi.</li>
+        <li>Sao chép chuỗi khoá vừa tạo và dán vào ô bên dưới, rồi bấm <b>Lưu API key</b>.</li>
+      </ol>
+      <p class="note">Gói miễn phí giới hạn số lượt gọi mỗi phút/ngày; nếu báo hết lượt, đợi một lúc rồi thử lại. Không chia sẻ key, không dán key lên nhóm chat hay chụp màn hình có key. Lỡ lộ key thì vào lại trang trên để xoá key cũ và tạo key mới.</p>
+    </details>
+    <label class="cap-lab" for="model">Mô hình Gemini</label>
+    <select id="model">
+      <option value="gemini-flash-lite-latest">Gemini Flash-Lite — miễn phí, nhẹ &amp; nhanh nhất</option>
+      <option value="gemini-flash-latest">Gemini Flash — giải thích kỹ hơn, vẫn miễn phí</option>
+    </select>
+    <p class="note" style="margin:4px 0 0">Mặc định dùng bản miễn phí. Đổi mô hình có hiệu lực ngay, không cần bấm Lưu.</p>
+    <label class="cap-lab" for="apiKey">API key</label>
+    <div class="row">
+      <input type="password" id="apiKey" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Dán API key vào đây" style="flex:1 1 240px">
+      <button type="button" id="showKey" aria-pressed="false">Hiện</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="pri" id="saveKey">Lưu API key</button>
+      <span id="keyState" class="keystate wait" aria-live="polite"></span>
+    </div>
+    <div id="keyMsg"></div>
+    <p class="note" style="margin:12px 0 0"><b>Riêng tư:</b> khoá chỉ nằm trong bộ nhớ trình duyệt của phiên làm việc này — không ghi ra đĩa, không gửi cho giảng viên, chỉ được gửi thẳng tới Google khi em bấm nhờ AI. Trang không gửi họ tên hay mã SV. Vì nhiều học sinh có thể dùng chung một máy/điện thoại, khoá sẽ tự mất khi tải lại trang hoặc bấm “Làm lại”, để không lộ sang phiên của bạn tiếp theo.</p>
+  </section>
+
+  <section id="selftest" class="card hidden"></section>
+
+  <section class="card" id="infoCard">
+    <h2>Thông tin người làm</h2>
+    <div class="grid3">
+      <div><label class="f" for="hoTen">Họ và tên</label><input type="text" id="hoTen" autocomplete="name"></div>
+      <div><label class="f" for="maSV">Mã SV</label><input type="text" id="maSV" inputmode="text"></div>
+      <div><label class="f" for="lop">Lớp</label><input type="text" id="lop"></div>
+    </div>
+    <div class="seg hidden" id="modeSeg" role="radiogroup" aria-label="Chọn bộ câu hỏi"></div>
+  </section>
+
+  <div class="sticky noprint" id="stickyBar">
+    <div class="prog"><span class="t" id="progTxt">Đã làm 0</span><div class="tr"><div class="fi" id="progFill"></div></div>
+      <button class="pri" id="topSubmit" type="button">Nộp bài</button></div>
+  </div>
+
+  <section id="resultCard" class="card hidden" aria-live="polite"></section>
+
+  <section class="card noprint hidden" id="aiResult">
+    <h2>Trợ lý AI: giải thích lỗi và gợi ý ôn tập</h2>
+    <p class="note" id="aiKeyState" style="margin:0 0 10px"></p>
+    <button class="pri" type="button" id="askAI" style="width:100%">Nhờ AI giải thích lỗi và gợi ý luyện tập tuần tới</button>
+    <p class="note" id="aiHint"></p>
+    <div id="aiOut"></div>
+  </section>
+
+  <section class="card hidden" id="legendCard"></section>
+
+  <main id="qs"></main>
+
+  <div class="submitbox noprint" id="submitBox">
+    <button class="pri" id="submitBtn" type="button" style="width:100%">Nộp bài và chấm điểm</button>
+    <div id="submitWarn" class="warnmsg hidden"></div>
+  </div>
+
+
+  <footer>Kiến trúc doanh nghiệp · Bài 2–3 · Phần chấm điểm chạy hoàn toàn trên máy, không cần mạng. Tiến độ làm bài được lưu tạm trên trình duyệt này.</footer>
+</div>
+
+<div id="lb" class="hidden" role="dialog" aria-modal="true" aria-label="Hình phóng to">
+  <div class="bar2"><span>Kéo để xem, chụm/giãn hai ngón để phóng to</span><button type="button" id="lbClose">Đóng ✕</button></div>
+  <div class="sc" id="lbSc"><img id="lbImg" alt=""></div>
+</div>
+
+<script>
+"use strict";
+/* ====== DỮ LIỆU (do build.py điền) ====== */
+const CFG = {"n": 30, "store": "ktdn_b23", "result_title": "KTDN Bài 2–3 — Văn hóa, giá trị và rủi ro", "groups_label": "chủ đề bài học", "multi_group": false, "full_time": "khoảng 30 phút", "pack_label": "", "pack_time": "", "legend_html": "", "small": [], "imgw": {}, "doc_key": "ABCDBCADBCDACBDACBDACBADCBDACB", "dist": "7,8,8,7", "pack_key": "", "cov": null, "sys": "Bạn là trợ giảng học phần Kiến trúc doanh nghiệp (Đại học Thăng Long), Bài 2–3: Cấu trúc và văn hóa doanh nghiệp; Giá trị và rủi ro của EA (giáo trình Scott A. Bernard, An Introduction to Enterprise Architecture).\nLuôn trả lời bằng tiếng Việt có dấu, giọng thân thiện, ngắn gọn, đúng thuật ngữ của lớp. Bám sát đáp án và lời giải của giảng viên được cung cấp; không bao giờ mâu thuẫn với đáp án đó.\n\nKiến thức chuẩn của buổi (dùng làm \"quy tắc\" khi giải thích):\n- Văn hóa doanh nghiệp: tổng hợp giá trị, niềm tin, thói quen, sở thích của mọi người trong doanh nghiệp. Bên liên quan: người đang hoặc sẽ bị ảnh hưởng bởi chương trình EA. EA liên quan đến con người, tương tác xã hội, quy trình và tài nguyên.\n- Kim cương Leavitt (1965): Cấu trúc – Công việc – Con người – Công nghệ tác động lẫn nhau; thay đổi một yếu tố phải quản lý đồng bộ các yếu tố còn lại.\n- Parsons (1950s), Thompson bổ sung (1960s): ba cấp Thể chế (quy tắc, tính hợp pháp, quan hệ xã hội), Quản lý (hòa giải với môi trường nhiệm vụ), Kỹ thuật (tạo ra sản phẩm, che chắn khỏi bất ổn). Liên hệ EA3: Thể chế ↔ Mục tiêu & sáng kiến; Quản lý ↔ Sản phẩm & dịch vụ, Dữ liệu & thông tin; Kỹ thuật ↔ Hệ thống & ứng dụng, Mạng & hạ tầng (có chồng lấn ở các tầng giáp ranh).\n- Mô hình mạng tổ chức (ONM): Nhóm điều hành đặt chính sách, mục tiêu, phê duyệt nguồn lực, đánh giá; Nhóm chức năng bán tự trị và Nhân công độc lập thực thi; phẳng, linh hoạt, có thể mở rộng ra chuỗi cung ứng.\n- Doanh nghiệp linh hoạt hơn tổ chức: có thể là một phần, toàn bộ hoặc nhiều tổ chức. Thành phần dọc (LOB/phân khúc), ngang (dùng chung nhiều LOB), mở rộng (nhiều tổ chức). Cách tiếp cận phân khúc: làm EA đầu tiên cho một phân khúc, dùng cùng một khung để tổng hợp sau.\n- Quản lý thay đổi: thiết lập kỳ vọng, cho bên liên quan tham gia để họ có một phần quyền kiểm soát nên dễ chấp nhận thay đổi. Người ta chống thay đổi khi không có quyền kiểm soát. Bốn cách: tham gia thành lập/quản lý, thông tin thường xuyên, tham gia lập kế hoạch và ra quyết định, quản lý kỳ vọng. Quản lý kỳ vọng = xác định đầu ra, kết quả thực tế, làm liên tục.\n- Giá trị EA: cải thiện lập kế hoạch (trên xuống và dưới lên), ra quyết định, giao tiếp, kho lưu trữ EA (thư viện tài liệu, bản vẽ điện tử 24/7). Lợi ích phải lớn hơn chi phí, nếu không thì không nên lập chương trình.\n- Năm rủi ro: tài chính (thiếu kinh phí khởi động, cắt ngân sách duy trì làm EA lỗi thời), thiếu sự chấp nhận, mất nhân sự chủ chốt, chậm tiến độ, công cụ tài liệu. Giảm thiểu: hỗ trợ lãnh đạo, củng cố ngân sách, không là người đầu tiên dùng công cụ mới, đào tạo người dự phòng, phương pháp luận chi tiết, công cụ chuẩn mở; làm liên tục.\n- 10 cách định lượng giá trị: rút ngắn chu kỳ lập kế hoạch, họp hiệu quả hơn, ra quyết định nhanh hơn, thông tin tham khảo tốt hơn, giảm tài nguyên trùng lặp, bớt làm lại, cải thiện hiệu suất và tích hợp, giảm nhân sự trong quy trình (BPR/BPI), cải thiện giao tiếp, giảm thời gian chu kỳ.\n- Chi phí: tiếp cận theo vòng đời (thực hiện, bảo trì, làm mới); chi phí ban đầu lớn hơn duy trì; ba khu vực chi phí theo thứ tự: lao động kiến trúc sư, công nghệ hỗ trợ, cơ sở vật chất.\n- Liên kết S–B–T (EA = S → B ← T): chiến lược dẫn dắt nghiệp vụ, công nghệ hỗ trợ và chỉ triển khai sau khi xác định yêu cầu nghiệp vụ; lập kế hoạch từ dưới lên khả thi nhưng không phải quy trình thông thường. Tài liệu chiến lược = mục tiêu (nhiều năm), sáng kiến (chương trình, dự án), thước đo (định lượng, biết khi nào đạt).\n- Lỗi thường gặp mà phương án nhiễu khai thác: nhầm sáng kiến với thước đo; nhầm thành phần ngang với dọc; coi công nghệ là yếu tố dẫn dắt; cho rằng mỗi phân khúc dùng khung riêng; nhầm hệ quả (ngừng dùng EA) với nguồn rủi ro (cắt ngân sách).", "ai_vi_du": "một ví dụ MỚI ngoài bối cảnh câu hỏi, lấy từ một doanh nghiệp hoặc cơ quan quen thuộc ở Việt Nam (ngân hàng, trường đại học, chuỗi bán lẻ, bệnh viện...), kèm 1 câu giải thích vì sao khớp quy tắc", "ai_bai_tu_luyen": "một tình huống ngắn tự soạn về một doanh nghiệp Việt Nam, yêu cầu nhận diện mô hình tổ chức, loại rủi ro hoặc cách định lượng giá trị EA, kèm đáp án ngắn ở cuối", "ai_advanced": "phân tích một doanh nghiệp thực tế theo Kim cương Leavitt và năm loại rủi ro EA, đề xuất thước đo chiến lược và business case"};
+const Q = [{"n": 1, "t": "Mô hình Kim cương Leavitt gồm bốn yếu tố nào?", "f": null, "o": ["Cấu trúc, Công việc, Con người, Công nghệ", "Chiến lược, Nghiệp vụ, Dữ liệu, Công nghệ", "Con người, Quy trình, Nguồn lực, Văn hóa", "Mục tiêu, Sáng kiến, Thước đo, Nguồn lực"], "gs": ["G2"], "part": "Phần A – Mức Nhớ (câu 1–10)"}, {"n": 2, "t": "Ai là người phát triển thêm quan điểm ba cấp của Talcott Parsons vào những năm 1960?", "f": null, "o": ["Harold Leavitt", "James Thompson", "John Kotter", "Scott Bernard"], "gs": ["G2"]}, {"n": 3, "t": "Ba cấp độ chung của hầu hết các tổ chức xã hội theo Parsons là:", "f": null, "o": ["Chiến lược, Chiến thuật, Tác nghiệp", "Điều hành, Chức năng, Độc lập", "Thể chế, Quản lý, Kỹ thuật", "Thể chế, Nghiệp vụ, Công nghệ"], "gs": ["G2"]}, {"n": 4, "t": "Trong Mô hình mạng tổ chức (ONM), nhóm nào đặt chính sách, mục tiêu, phê duyệt nguồn lực và đánh giá kết quả?", "f": null, "o": ["Nhóm chức năng bán tự trị", "Nhân công độc lập", "Đối tác kinh doanh bên ngoài", "Nhóm điều hành"], "gs": ["G2"]}, {"n": 5, "t": "Thành phần \"ngang\" (doanh nghiệp cắt ngang) là:", "f": null, "o": ["Lĩnh vực hoạt động riêng của một ngành nghiệp vụ (LOB)", "Hoạt động tổng quát phục vụ nhiều ngành nghiệp vụ", "Phần bao gồm nhiều tổ chức, như chuỗi cung ứng", "Bộ phận nghiên cứu và phát triển"], "gs": ["G3"]}, {"n": 6, "t": "Theo giáo trình, \"quản lý thay đổi\" là quá trình:", "f": null, "o": ["Thay thế công nghệ cũ bằng công nghệ mới theo lộ trình", "Lãnh đạo ban hành quyết định thay đổi và giám sát việc tuân thủ", "Thiết lập kỳ vọng và lôi kéo các bên liên quan tham gia để họ có một phần quyền kiểm soát đối với sự thay đổi", "Đo lường lợi tức đầu tư của chương trình EA"], "gs": ["G4"]}, {"n": 7, "t": "Năm loại rủi ro khi thực hiện và duy trì chương trình EA là:", "f": null, "o": ["Tài chính, thiếu sự chấp nhận, mất nhân sự chủ chốt, chậm tiến độ, công cụ tài liệu", "Tài chính, pháp lý, thị trường, công nghệ, thiên tai", "Bảo mật, dữ liệu, mạng, phần cứng, phần mềm", "Chiến lược, nghiệp vụ, dữ liệu, ứng dụng, hạ tầng"], "gs": ["G6"]}, {"n": 8, "t": "Khu vực chi phí lớn nhất khi phát triển và duy trì tài liệu EA là:", "f": null, "o": ["Phần cứng máy chủ", "Bản quyền công cụ EA", "Cơ sở vật chất cho nhóm EA", "Chi phí lao động của các kiến trúc sư được đào tạo"], "gs": ["G7"]}, {"n": 9, "t": "Tài liệu hóa chiến lược trong EA gồm ba thành phần nào?", "f": null, "o": ["Tầm nhìn, Sứ mệnh, Giá trị cốt lõi", "Mục tiêu chiến lược, Sáng kiến chiến lược, Thước đo chiến lược", "Kế hoạch, Ngân sách, Nhân sự", "Hiện tại, Tương lai, Kế hoạch chuyển đổi"], "gs": ["G8"]}, {"n": 10, "t": "Kho lưu trữ thông tin EA trực tuyến được giáo trình ví như:", "f": null, "o": ["Một hộp đen chỉ kiến trúc sư trưởng truy cập", "Một kho lạnh lưu trữ hồ sơ cũ", "Một thư viện tài liệu và bản vẽ điện tử hoạt động 24/7", "Một bảng điều khiển tài chính theo thời gian thực"], "gs": ["G5"]}, {"n": 11, "t": "Vì sao giáo trình khẳng định EA liên quan đến con người và tương tác xã hội, chứ không chỉ công nghệ?", "f": null, "o": ["Vì EA thay thế chức năng của phòng nhân sự", "Vì công nghệ không còn quan trọng trong doanh nghiệp hiện đại", "Vì kiến trúc sư doanh nghiệp phải là nhà xã hội học", "Vì muốn có quan điểm chính xác về kiến trúc hiện tại và phù hợp về tương lai, cần hiểu cả con người, quy trình và cách dùng tài nguyên"], "gs": ["G1"], "part": "Phần B – Mức Hiểu (câu 11–20)"}, {"n": 12, "t": "Ý nghĩa chính của Kim cương Leavitt đối với một dự án chuyển đổi số là gì?", "f": null, "o": ["Thay đổi một yếu tố sẽ ảnh hưởng các yếu tố còn lại, nên phải quản lý thay đổi đồng bộ", "Công nghệ là yếu tố quyết định duy nhất của thành công", "Cấu trúc tổ chức nên được thay đổi đầu tiên và độc lập với các yếu tố khác", "Con người chỉ cần thích nghi sau khi công nghệ đã triển khai xong"], "gs": ["G2"]}, {"n": 13, "t": "Khi liên hệ mô hình Parsons/Thompson với khối EA3, cấp **Thể chế** tương ứng chủ yếu với tầng nào?", "f": null, "o": ["Hệ thống & ứng dụng", "Dữ liệu & thông tin", "Mục tiêu & sáng kiến", "Mạng & hạ tầng"], "gs": ["G2"]}, {"n": 14, "t": "Điểm khác biệt cốt lõi giữa \"tổ chức\" và \"doanh nghiệp\" theo giáo trình là:", "f": null, "o": ["Tổ chức có văn hóa, còn doanh nghiệp thì không", "Doanh nghiệp có thể là một phần tổ chức, toàn bộ tổ chức hoặc nhiều tổ chức", "Doanh nghiệp luôn hoạt động vì lợi nhuận, tổ chức thì không", "Tổ chức không có mục tiêu và nguồn lực riêng"], "gs": ["G3"]}, {"n": 15, "t": "Vì sao \"cách tiếp cận phân khúc\" thích hợp cho phiên bản EA đầu tiên?", "f": null, "o": ["Vì nó loại bỏ nhu cầu dùng một khung EA chung", "Vì mỗi phân khúc được tự do chọn khung EA riêng", "Vì nó chỉ áp dụng được cho doanh nghiệp nhỏ", "Vì khối lượng công việc dễ quản lý hơn, chi phí ban đầu thấp hơn khi chưa có kinh nghiệm"], "gs": ["G3"]}, {"n": 16, "t": "Theo giáo trình, các bên liên quan có xu hướng chống lại chương trình EA chủ yếu khi nào?", "f": null, "o": ["Khi họ không có mức độ kiểm soát nào đối với sự thay đổi", "Khi họ không am hiểu công nghệ", "Khi EA chắc chắn làm giảm biên chế", "Khi họ phải tự chi trả chi phí EA"], "gs": ["G4"]}, {"n": 17, "t": "Nhận định nào đúng về \"quản lý kỳ vọng\" trong chương trình EA?", "f": null, "o": ["Nên hứa EA giải quyết mọi vấn đề để nhanh chóng có sự ủng hộ", "Nên giữ kín tiến độ để tránh áp lực từ các bên liên quan", "Là xác định đầu ra, kết quả thực tế và được thực hiện liên tục", "Chỉ cần thực hiện một lần khi khởi động chương trình"], "gs": ["G4"]}, {"n": 18, "t": "Theo giáo trình, khi nào **không nên** thiết lập chương trình EA?", "f": null, "o": ["Khi doanh nghiệp có quy mô nhỏ", "Khi lợi ích dự kiến không lớn hơn chi phí thực hiện", "Khi chưa mua được công cụ EA thương mại", "Khi doanh nghiệp đã có chiến lược kinh doanh"], "gs": ["G5"]}, {"n": 19, "t": "Vì sao chi phí thiết lập phiên bản EA ban đầu lớn hơn chi phí cập nhật, duy trì?", "f": null, "o": ["Vì giá công cụ EA tăng dần theo thời gian", "Vì lương kiến trúc sư giảm sau năm đầu", "Vì sau năm đầu EA không cần cập nhật nữa", "Vì phải xây dựng quy trình, năng lực EA mới và giành sự ủng hộ của các bên liên quan"], "gs": ["G7"]}, {"n": 20, "t": "Nhận định nào đúng với cách EA liên kết Chiến lược – Nghiệp vụ – Công nghệ?", "f": null, "o": ["Công nghệ là nguồn lực hỗ trợ, chỉ triển khai sau khi đã xác định yêu cầu nghiệp vụ", "Công nghệ mới nên dẫn dắt kế hoạch chiến lược", "Lập kế hoạch từ dưới lên là quy trình thông thường để triển khai tài nguyên", "Chiến lược và công nghệ được lập kế hoạch độc lập với nhau"], "gs": ["G8"]}, {"n": 21, "t": "Một ngân hàng triển khai phần mềm ngân hàng lõi mới nhưng không đào tạo giao dịch viên và giữ nguyên quy trình cũ; giao dịch tại quầy chậm hơn trước. Theo Kim cương Leavitt, nguyên nhân gốc là gì?", "f": null, "o": ["Công nghệ chưa đủ hiện đại", "Cấu trúc tổ chức quá phẳng", "Thay đổi Công nghệ không đồng bộ với Con người và Công việc", "Ngân hàng thiếu nhân công độc lập"], "gs": ["G2"], "part": "Phần C – Mức Vận dụng (câu 21–30)"}, {"n": 22, "t": "Một tập đoàn bán lẻ có chuỗi siêu thị, chuỗi điện máy và kênh thương mại điện tử; cả ba dùng chung một phòng CNTT và hệ thống kế toán. Phòng CNTT dùng chung thuộc loại thành phần nào?", "f": null, "o": ["Thành phần dọc", "Thành phần ngang", "Thành phần mở rộng", "Một phân khúc LOB độc lập"], "gs": ["G3"]}, {"n": 23, "t": "Một công ty phần mềm 40 người gồm nhóm sáng lập đặt mục tiêu, bốn nhóm sản phẩm tự chủ, và một số freelancer thiết kế làm việc từ xa theo dự án. Mô hình nào mô tả cấu trúc này phù hợp nhất?", "f": null, "o": ["Mô hình mạng tổ chức (ONM)", "Mô hình Parsons/Thompson ba cấp thuần túy", "Mô hình Kim cương Leavitt", "Cơ cấu chức năng truyền thống nhiều tầng quản lý"], "gs": ["G2"]}, {"n": 24, "t": "Một trường đại học muốn triển khai EA lần đầu, ngân sách hạn chế và đội ngũ chưa có kinh nghiệm. Cách làm hợp lý nhất là:", "f": null, "o": ["Làm EA cho toàn trường cùng lúc để có bức tranh đầy đủ ngay", "Mua công cụ EA mới nhất trên thị trường trước khi làm gì khác", "Để mỗi khoa tự chọn một khung EA riêng cho phù hợp", "Bắt đầu với phân khúc Đào tạo theo một khung EA chung, sau đó mở rộng dần"], "gs": ["G3"]}, {"n": 25, "t": "Kiến trúc sư trưởng là người duy nhất nắm rõ kho EA và vừa nộp đơn nghỉ việc. Đây là rủi ro nào và biện pháp phòng ngừa phù hợp là gì?", "f": null, "o": ["Rủi ro tài chính – tăng ngân sách cho chương trình", "Rủi ro chậm tiến độ – rút ngắn lịch trình", "Rủi ro mất nhân sự chủ chốt – đào tạo người dự phòng trong nhóm EA", "Rủi ro thiếu sự chấp nhận – tăng cường truyền thông"], "gs": ["G6"]}, {"n": 26, "t": "Sau hai năm vận hành, ngân sách duy trì EA bị cắt giảm; kho EA không được cập nhật và các phòng ban dần ngừng sử dụng. Đây là biểu hiện của rủi ro nào?", "f": null, "o": ["Thiếu sự chấp nhận", "Tài chính", "Công cụ tài liệu", "Chậm tiến độ"], "gs": ["G6"]}, {"n": 27, "t": "Các trưởng phòng phản đối chương trình EA vì cho rằng EA \"lấy mất quyền tự quyết ngân sách CNTT\" của họ. Biện pháp phù hợp nhất theo bài học là:", "f": null, "o": ["Ban hành quyết định bắt buộc tuân thủ", "Tạm hoãn chương trình EA vô thời hạn", "Thuê tư vấn bên ngoài làm EA thay cho các phòng", "Mời họ tham gia quản trị EA, lập kế hoạch và ra quyết định, kèm truyền thông thường xuyên"], "gs": ["G4"]}, {"n": 28, "t": "Hai bộ phận cùng đề xuất mua hai hệ thống CRM gần giống nhau; nhóm EA phát hiện và đề xuất dùng chung một hệ thống, tiết kiệm đáng kể. Khoản tiết kiệm này thuộc cách định lượng giá trị nào?", "f": null, "o": ["Giảm tài nguyên trùng lặp", "Rút ngắn chu kỳ lập kế hoạch", "Giảm nhân sự trong quy trình", "Cải thiện giao tiếp"], "gs": ["G5"]}, {"n": 29, "t": "Một công ty logistics đặt mục tiêu \"giảm thời gian giao hàng nội thành trong 3 năm\". Mục nào dưới đây là **thước đo chiến lược**?", "f": null, "o": ["Triển khai ứng dụng tối ưu tuyến đường", "Mở thêm 5 kho vệ tinh trong nội thành", "Thời gian giao hàng trung bình giảm 20% so với năm gốc", "Đào tạo tài xế sử dụng ứng dụng mới"], "gs": ["G8"]}, {"n": 30, "t": "Giám đốc CNTT đề xuất mua một nền tảng AI \"vì đối thủ đã có\", trong khi chưa xác định bài toán nghiệp vụ nào cần giải quyết. Theo quan điểm EA, phản hồi phù hợp nhất là:", "f": null, "o": ["Đồng ý ngay vì công nghệ mới luôn tạo lợi thế cạnh tranh", "Yêu cầu xác định mục tiêu chiến lược và yêu cầu nghiệp vụ trước khi chọn công nghệ", "Từ chối mọi đề xuất đầu tư AI", "Để phòng CNTT tự quyết định vì đây là việc chuyên môn"], "gs": ["G8"]}];
+const GROUPS = [{"id": "G1", "name": "Văn hóa & bên liên quan", "ref": "Khái niệm văn hóa, bên liên quan, EA gắn với con người — slide 8–10, 27"}, {"id": "G2", "name": "Mô hình tổ chức (Leavitt, Parsons/Thompson, ONM)", "ref": "Các mô hình tổ chức — slide 14–23"}, {"id": "G3", "name": "Tổ chức – doanh nghiệp, phân khúc", "ref": "Tổ chức và doanh nghiệp, thành phần dọc/ngang/mở rộng, cách tiếp cận phân khúc — slide 24–26"}, {"id": "G4", "name": "Quản lý thay đổi & kỳ vọng", "ref": "Quản lý thay đổi, sự tham gia, quản lý kỳ vọng — slide 28–32"}, {"id": "G5", "name": "Giá trị & định lượng giá trị EA", "ref": "Giá trị của EA, kho EA, 10 cách định lượng giá trị — slide 36–43, 52–62"}, {"id": "G6", "name": "Rủi ro & giảm thiểu", "ref": "Năm loại rủi ro, giảm thiểu rủi ro — slide 44–51"}, {"id": "G7", "name": "Chi phí chương trình EA", "ref": "Định lượng chi phí, chi phí vòng đời, ba khu vực chi phí — slide 63–65"}, {"id": "G8", "name": "Liên kết Chiến lược – Nghiệp vụ – Công nghệ", "ref": "Liên kết S–B–T, tài liệu chiến lược — slide 66–70"}];
+const PACK12 = [];
+const PACK12_RULE = {"min": 0, "need": []};
+const IMG = {};
+/* Đáp án được mã hoá base64 để học sinh không vô tình đọc thấy khi mở mã nguồn.
+   Đây KHÔNG phải bảo mật: người cố ý vẫn giải mã được. */
+const KEY = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("eyIxIjogeyJrIjogIkEiLCAiZSI6ICJMZWF2aXR0ICgxOTY1KSBtw7QgdOG6oyB04buVIGNo4bupYyBi4bqxbmcgYuG7kW4gxJHhu4luaCBTdHJ1Y3R1cmUg4oCTIFRhc2sg4oCTIFBlb3BsZSDigJMgVGVjaG5vbG9neSBu4buRaSB24bubaSBuaGF1LiBCIGzDoCBjw7RuZyB0aOG7qWMgRUEgPSBTICsgQiArIFQgcGhhIGzhuqtuOyBDIHbDoCBEIGzDoCBraMOhaSBuaeG7h20gY+G7p2EgcGjhuqduIGtow6FjIChuZ3Xhu5NuIGzhu7FjLCB0w6BpIGxp4buHdSBjaGnhur9uIGzGsOG7o2MpLiIsICJvbiI6ICJzbGlkZSAxNOKAkzE1IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjIiOiB7ImsiOiAiQiIsICJlIjogIlBhcnNvbnMgxJHGsGEgcmEgYmEgY+G6pXAgdsOgbyB0aOG6rXAgbmnDqm4gMTk1MDsgSmFtZXMgVGhvbXBzb24gYuG7lSBzdW5nIGPDoWMgbG/huqFpIGhv4bqhdCDEkeG7mW5nIOG7nyBt4buXaSBj4bqlcCB2w6BvIHRo4bqtcCBuacOqbiAxOTYwLiBLb3R0ZXIgZ+G6r24gduG7m2kgcXXhuqNuIGzDvSB0aGF5IMSR4buVaSwgQmVybmFyZCBsw6AgdMOhYyBnaeG6oyBnacOhbyB0csOsbmguIiwgIm9uIjogInNsaWRlIDE2IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjMiOiB7ImsiOiAiQyIsICJlIjogIkJhIGPhuqVwIGzDoCBUaOG7gyBjaOG6vyAocXVhbiBo4buHIHbhu5tpIHjDoyBo4buZaSwgdMOtbmggaOG7o3AgcGjDoXApLCBRdeG6o24gbMO9IChow7JhIGdp4bqjaSB24bubaSBtw7RpIHRyxrDhu51uZyBuaGnhu4dtIHbhu6UpLCBL4bu5IHRodeG6rXQgKG7GoWkgdOG6oW8gcmEgc+G6o24gcGjhuqltKS4gQiBsw6AgY8OhYyBuaMOzbSBj4bunYSBPTk07IEQgdHLhu5luIHbhu5tpIGPDoWMgbOG7m3AgRUEuIiwgIm9uIjogInNsaWRlIDE24oCTMTcgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiNCI6IHsiayI6ICJEIiwgImUiOiAiTmjDs20gxJFp4buBdSBow6BuaCDEkeG6t3QgY2jDrW5oIHPDoWNoLCBt4bulYyB0acOqdSwgcGjDqiBkdXnhu4d0IG5ndeG7k24gbOG7sWMgdsOgIMSRw6FuaCBnacOhIGvhur90IHF14bqjLiBOaMOzbSBjaOG7qWMgbsSDbmcgdsOgIG5ow6JuIGPDtG5nIMSR4buZYyBs4bqtcCB0aMOsIHRo4buxYyB0aGkg4oCTIHF14bqjbiBsw70gY2jGsMahbmcgdHLDrG5oL0xPQiwgZOG7sSDDoW4gbeG7m2kuIiwgIm9uIjogInNsaWRlIDE5IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjUiOiB7ImsiOiAiQiIsICJlIjogIlRow6BuaCBwaOG6p24gbmdhbmcgcGjhu6VjIHbhu6Ugbmhp4buBdSBMT0IgKENOVFQsIG5ow6JuIHPhu7EsIHTDoGkgY2jDrW5oKS4gQSB2w6AgRCBsw6AgdGjDoG5oIHBo4bqnbiBk4buNYzsgQyBsw6AgdGjDoG5oIHBo4bqnbiBt4bufIHLhu5luZy4iLCAib24iOiAic2xpZGUgMjUgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiNiI6IHsiayI6ICJDIiwgImUiOiAiQ+G7kXQgbMO1aSBj4bunYSDEkeG7i25oIG5naMSpYSBsw6AgdHJhbyBjaG8gYsOqbiBsacOqbiBxdWFuIG3hu5l0IHBo4bqnbiBxdXnhu4FuIGtp4buDbSBzb8OhdCDEkeG7gyBo4buNIGThu4UgY2jhuqVwIG5o4bqtbiB0aGF5IMSR4buVaS4gQiBsw6AgY8OhY2ggw6FwIMSR4bq3dCDigJMgxJHDum5nIMSRaeG7gXUgbMOgbSB0xINuZyBz4buxIGNo4buRbmcgxJHhu5FpLiIsICJvbiI6ICJzbGlkZSAzMCAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICI3IjogeyJrIjogIkEiLCAiZSI6ICJHacOhbyB0csOsbmggbsOqdSDEkcO6bmcgbsSDbSBy4bunaSBybyBj4bunYSBjaMawxqFuZyB0csOsbmggRUEuIEIgbMOgIHLhu6dpIHJvIGtpbmggZG9hbmggY2h1bmc7IEMgbMOgIHLhu6dpIHJvIGFuIHRvw6BuIHRow7RuZyB0aW47IEQgbMOgIGPDoWMgbOG7m3Aga2nhur9uIHRyw7pjLCBraMO0bmcgcGjhuqNpIHLhu6dpIHJvLiIsICJvbiI6ICJzbGlkZSA0NSAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICI4IjogeyJrIjogIkQiLCAiZSI6ICJFQSBsw6AgaG/huqF0IMSR4buZbmcgcGjDom4gdMOtY2ggbsOibmcgY2FvIG7Dqm4gbGFvIMSR4buZbmcgY2h1ecOqbiBtw7RuIGNoaeG6v20gcGjhuqduIGzhu5tuIGNoaSBwaMOtLiBDw7RuZyBuZ2jhu4cgaOG7lyB0cuG7oyDEkeG7qW5nIHRo4bupIGhhaSwgY8ahIHPhu58gduG6rXQgY2jhuqV0IHRo4bupIGJhLiIsICJvbiI6ICJzbGlkZSA2NSAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICI5IjogeyJrIjogIkIiLCAiZSI6ICJN4bulYyB0acOqdSAoxJHDrWNoIMSR4bq/biBuaGnhu4F1IG7Eg20pIOKAkyBTw6FuZyBraeG6v24gKGNoxrDGoW5nIHRyw6xuaCwgZOG7sSDDoW4gxJHhu4MgxJHhuqF0IG3hu6VjIHRpw6p1KSDigJMgVGjGsOG7m2MgxJFvIChiaeG6v3Qga2hpIG7DoG8gxJHDoyBcInRo4bqvbmdcIikuIEQgbMOgIGPDoWMgcXVhbiDEkWnhu4NtIGPhu6dhIEVBLCBraMO0bmcgcGjhuqNpIHTDoGkgbGnhu4d1IGNoaeG6v24gbMaw4bujYy4iLCAib24iOiAic2xpZGUgNjfigJM2OCAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIxMCI6IHsiayI6ICJDIiwgImUiOiAiS2hvIEVBIG5oxrAgdGjGsCB2aeG7h24gxJFp4buHbiB04butIDI0LzcsIG3hu41pIG5nxrDhu51pIGPDuW5nIHRydXkgY+G6rXAgbeG7mXQgYuG7mSB0w6BpIGxp4buHdSB0aGFtIGNoaeG6v3UuIEEgc2FpIHbDrCBnacOhIHRy4buLIGPhu6dhIGtobyBu4bqxbSDhu58gY2jhu5cgxJHGsOG7o2MgZMO5bmcgY2h1bmcuIiwgIm9uIjogInNsaWRlIDQzIChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjExIjogeyJrIjogIkQiLCAiZSI6ICJFQSBtw7QgdOG6oyBj4bqjIGNvbiBuZ8aw4budaSwgcXV5IHRyw6xuaCB2w6Agbmd14buTbiBs4buxYzsgdGhp4bq/dSBoaeG7g3UgYmnhur90IHbhu4EgY29uIG5nxrDhu51pIHRow6wgcXVhbiDEkWnhu4NtIGhp4buHbiB04bqhaSBzYWkgdsOgIHF1YW4gxJFp4buDbSB0xrDGoW5nIGxhaSBraMO0bmcga2jhuqMgdGhpIOKAkyBuaMawIGtp4bq/biB0csO6YyBzxrAgbmjDoCBwaOG6o2kgaGnhu4N1IG5nxrDhu51pIOG7ny4gQSwgQiwgQyBsw6Agc3V5IGRp4buFbiBxdcOhIG3hu6ljLiIsICJvbiI6ICJzbGlkZSA5IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjEyIjogeyJrIjogIkEiLCAiZSI6ICJDw6FjIG3FqWkgdMOqbiBoYWkgY2hp4buBdSB0cm9uZyBzxqEgxJHhu5MgbsOzaSBy4bqxbmcgYuG7kW4geeG6v3UgdOG7kSBwaOG7pSB0aHXhu5ljIGzhuqtuIG5oYXUuIEIsIEMsIEQgxJHhu4F1IGNvaSBt4buZdCB54bq/dSB04buRIGzDoCDEkeG7mWMgbOG6rXAg4oCTIHRyw6FpIHbhu5tpIMO9IGNow61uaCBj4bunYSBtw7QgaMOsbmguIiwgIm9uIjogInNsaWRlIDE1IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjEzIjogeyJrIjogIkMiLCAiZSI6ICJD4bqlcCBUaOG7gyBjaOG6vyB4w6FjIGzhuq1wIMSR4buLbmggaMaw4bubbmcgdsOgIHTDrW5oIGjhu6NwIHBow6FwIG7Dqm4gZ+G6r24gduG7m2kgdOG6p25nIE3hu6VjIHRpw6p1ICYgc8Ohbmcga2nhur9uIOG7nyDEkeG7iW5oIGto4buRaSBFQTMuIEPDoWMgdOG6p25nIEjhu4cgdGjhu5FuZyB2w6AgTeG6oW5nIGfhuq9uIHbhu5tpIGPhuqVwIEvhu7kgdGh14bqtdDsgROG7ryBsaeG7h3UgZ+G6r24gduG7m2kgY+G6pXAgUXXhuqNuIGzDvS4iLCAib24iOiAic2xpZGUgMTggKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMTQiOiB7ImsiOiAiQiIsICJlIjogIkPhuqMgaGFpIMSR4buBdSBjw7MgdsSDbiBow7NhLCBt4bulYyB0acOqdSwgbmd14buTbiBs4buxYyAobG/huqFpIEEsIEQpLiBcIkRvYW5oIG5naGnhu4dwXCIgdHJvbmcgRUEgbMOgIGtow6FpIG5p4buHbSBsaW5oIGhv4bqhdCB24buBIHBo4bqhbSB2aSwga2jDtG5nIGfhuq9uIHbhu5tpIG3hu6VjIMSRw61jaCBs4bujaSBuaHXhuq1uIChsb+G6oWkgQykg4oCTIGPGoSBxdWFuIG5ow6Agbsaw4bubYyBjxaluZyBsw6AgXCJkb2FuaCBuZ2hp4buHcFwiLiIsICJvbiI6ICJzbGlkZSAyNCAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIxNSI6IHsiayI6ICJEIiwgImUiOiAiUGjDom4ga2jDumMgZ2nDunAgbMOgbSB24burYSBz4bupYywgdMOtY2ggbMWpeSBraW5oIG5naGnhu4dtLiBC4bqreSDhu58gQjogY8OhYyBwaMOibiBraMO6YyBwaOG6o2kgZMO5bmcgY8O5bmcgbeG7mXQga2h1bmcgdGjDrCBt4bubaSB04buVbmcgaOG7o3AgxJHGsOG7o2MgdGjDoG5oIGLhu6ljIHRyYW5oIGNodW5nLiIsICJvbiI6ICJzbGlkZSAyNiAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIxNiI6IHsiayI6ICJBIiwgImUiOiAiQ29uIG5nxrDhu51pIGNo4buRbmcgbOG6oWkgdGhheSDEkeG7lWkga2hpIGjhu40ga2jDtG5nIGPDsyBxdXnhu4FuIGtp4buDbSBzb8OhdDsgdsOsIHbhuq15IGPDoWMgYmnhu4duIHBow6FwIMSR4buBdSBuaOG6sW0gdMSDbmcgbeG7qWMga2nhu4NtIHNvw6F0IGPhu6dhIGjhu40uIEIsIEMsIEQgY8OzIHRo4buDIHjhuqN5IHJhIG5oxrBuZyBraMO0bmcgcGjhuqNpIGzhuq1wIGx14bqtbiBj4bunYSBnacOhbyB0csOsbmguIiwgIm9uIjogInNsaWRlIDI5IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjE3IjogeyJrIjogIkMiLCAiZSI6ICJRdeG6o24gbMO9IGvhu7MgduG7jW5nIGzDoCB4w6FjIMSR4buLbmggxJHhuqd1IHJhIHbDoCBr4bq/dCBxdeG6oyB0aOG7sWMgdOG6vywgbMOgbSBsacOqbiB04bulYy4gSOG7qWEgcXXDoSBt4bupYyAoQSkgZOG6q24gxJHhur9uIHRo4bqldCB24buNbmc7IGdp4buvIGvDrW4gKEIpIHRyw6FpIHbhu5tpIHnDqnUgY+G6p3UgdHJ1eeG7gW4gdGjDtG5nOyBEIHNhaSB2w6wgxJHDonkgbMOgIHZp4buHYyBsacOqbiB04bulYy4iLCAib24iOiAic2xpZGUgMzIgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMTgiOiB7ImsiOiAiQiIsICJlIjogIk5ndXnDqm4gdOG6r2M6IGzhu6NpIMOtY2ggcGjhuqNpIGzhu5tuIGjGoW4gY2hpIHBow60uIERvYW5oIG5naGnhu4dwIG5o4buPIHbhuqtuIGjGsOG7n25nIGzhu6NpIHThu6sgRUEgKGxv4bqhaSBBKTsgY8O0bmcgY+G7pSBraMO0bmcgcGjhuqNpIMSRaeG7gXUga2nhu4duIHRpw6puIHF1eeG6v3QgKGxv4bqhaSBDKS4iLCAib24iOiAic2xpZGUgMzggKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMTkiOiB7ImsiOiAiRCIsICJlIjogIk7Eg20gxJHhuqd1IHBo4bqjaSBk4buxbmcgcXV5IHRyw6xuaCwgbsSDbmcgbOG7sWMsIGto4bqjbyBzw6F0IGhp4buHbiB0cuG6oW5nIHbDoCB24bqtbiDEkeG7mW5nIHPhu7Eg4bunbmcgaOG7mS4gQyBzYWk6IEVBIHbhuqtuIGPhuqduIGPhuq1wIG5o4bqtdCDEkeG7i25oIGvhu7MsIG7hur91IGtow7RuZyBz4bq9IGzhu5dpIHRo4budaS4iLCAib24iOiAic2xpZGUgNjQgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMjAiOiB7ImsiOiAiQSIsICJlIjogIkNoaeG6v24gbMaw4bujYyBk4bqrbiBk4bqvdCBuZ2hp4buHcCB24bulLCBjw7RuZyBuZ2jhu4cgaOG7lyB0cuG7oy4gTOG6rXAga+G6vyBob+G6oWNoIHThu6sgZMaw4bubaSBsw6puIHbhuqtuIGto4bqjIHRoaSBuaMawbmcga2jDtG5nIHBo4bqjaSBxdXkgdHLDrG5oIHRow7RuZyB0aMaw4budbmcgKGxv4bqhaSBDKS4iLCAib24iOiAic2xpZGUgNjYsIDcwIChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjIxIjogeyJrIjogIkMiLCAiZSI6ICJOZ8OibiBow6BuZyBjaOG7iSB0aGF5IMSR4buVaSDEkeG7iW5oIEPDtG5nIG5naOG7hyBtw6AgYuG7jyBxdWEgQ29uIG5nxrDhu51pICjEkcOgbyB04bqhbykgdsOgIEPDtG5nIHZp4buHYyAocXV5IHRyw6xuaCksIG7Dqm4gaOG7hyB0aOG7kW5nIG3huqV0IGPDom4gYuG6sW5nLiBQaOG6p24gbeG7gW0gbeG7m2kga2jDtG5nIHBo4bqjaSB24bqlbiDEkeG7gSAobG/huqFpIEEpLiIsICJvbiI6ICJzbGlkZSAxNOKAkzE1IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjIyIjogeyJrIjogIkIiLCAiZSI6ICJQaMOybmcgQ05UVCBwaOG7pWMgduG7pSBj4bqjIGJhIExPQiBuw6puIGzDoCB0aMOgbmggcGjhuqduIG5nYW5nLiBN4buXaSBjaHXhu5dpIChzacOqdSB0aOG7iywgxJFp4buHbiBtw6F5LCBUTcSQVCkgbeG7m2kgbMOgIHRow6BuaCBwaOG6p24gZOG7jWMvcGjDom4ga2jDumM7IHRow6BuaCBwaOG6p24gbeG7nyBy4buZbmcgcGjhuqNpIGxpw6puIHF1YW4gdOG7lSBjaOG7qWMga2jDoWMuIiwgIm9uIjogInNsaWRlIDI1IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjIzIjogeyJrIjogIkEiLCAiZSI6ICJOaMOzbSBzw6FuZyBs4bqtcCA9IE5ow7NtIMSRaeG7gXUgaMOgbmg7IG5ow7NtIHPhuqNuIHBo4bqpbSB04buxIGNo4bunID0gTmjDs20gY2jhu6ljIG7Eg25nIGLDoW4gdOG7sSB0cuG7izsgZnJlZWxhbmNlciA9IE5ow6JuIGPDtG5nIMSR4buZYyBs4bqtcC4gxJDDonkgbMOgIGPhuqV1IHRyw7pjIE9OTSDEkWnhu4NuIGjDrG5oLiBMZWF2aXR0IG3DtCB04bqjIGPDoWMgeeG6v3UgdOG7kSwga2jDtG5nIG3DtCB04bqjIGPhuqV1IHRyw7pjIG5ow7NtLiIsICJvbiI6ICJzbGlkZSAxOeKAkzIwIChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjI0IjogeyJrIjogIkQiLCAiZSI6ICLEkMOieSBsw6AgY8OhY2ggdGnhur9wIGPhuq1uIHBow6JuIGtow7pjIHbhu5tpIG3hu5l0IGtodW5nIGNodW5nLCBnaeG7kW5nIERNQyB0aMOtIMSRaeG7g20g4bufIFTDoGkgY2jDrW5oLCBT4bqjbiB4deG6pXQuIEEgdOG7kW4ga8OpbSB2w6AgcuG7p2kgcm87IEIgdHLDoWkga2h1eeG6v24gbmdo4buLIFwia2jDtG5nIGzDoCBuZ8aw4budaSDEkeG6p3UgdGnDqm4gZMO5bmcgY8O0bmcgY+G7pSBt4bubaVwiOyBDIGtoaeG6v24ga2jDtG5nIHThu5VuZyBo4bujcCDEkcaw4bujYy4iLCAib24iOiAic2xpZGUgMjYgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMjUiOiB7ImsiOiAiQyIsICJlIjogIk3huqV0IG5nxrDhu51pIG7huq9tIGvhu7kgbsSDbmcgdGhlbiBjaOG7kXQgbMOgIHLhu6dpIHJvIG3huqV0IG5ow6JuIHPhu7EgY2jhu6cgY2jhu5F0OyBnacOhbyB0csOsbmgga2h1eeG6v24gbmdo4buLIMSRw6BvIHThuqFvIG5nxrDhu51pIGThu7EgcGjDsm5nIHRyb25nIG5ow7NtIEVBLiBDaOG6rW0gdGnhur9uIMSR4buZIGPDsyB0aOG7gyBsw6AgaOG7hyBxdeG6oywga2jDtG5nIHBo4bqjaSBuZ3Xhu5NuIHLhu6dpIHJvLiIsICJvbiI6ICJzbGlkZSA0OCwgNTEgKGLDoGkgZ2nhuqNuZyBCw6BpIDLigJMzKSJ9LCAiMjYiOiB7ImsiOiAiQiIsICJlIjogIkdpw6FvIHRyw6xuaCBuw6p1IHLDtTogY+G6r3QgbmfDom4gc8OhY2ggZHV5IHRyw6wga2hp4bq/biB0aMO0bmcgdGluIEVBIGPFqSDEkWkgdsOgIGtow7RuZyBjw7JuIMSRxrDhu6NjIGTDuW5nIOKAkyDEkcOzIGzDoCBy4bunaSBybyB0w6BpIGNow61uaC4gVmnhu4djIGPDoWMgcGjDsm5nIG5n4burbmcgZMO5bmcgbMOgIGjhu4cgcXXhuqMsIG7Dqm4gQSBk4buFIGfDonkgbmjhuqdtLiIsICJvbiI6ICJzbGlkZSA0NiAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIyNyI6IHsiayI6ICJEIiwgImUiOiAiQ8OhYyB0csaw4bufbmcgcGjDsm5nIHPhu6MgbeG6pXQgcXV54buBbiBraeG7g20gc2/DoXQsIG7Dqm4gY8OhY2ggxJHDum5nIGzDoCB0cmFvIGzhuqFpIGNobyBo4buNIG3hu5l0IHBo4bqnbiBraeG7g20gc2/DoXQgcXVhIHZp4buHYyB0aGFtIGdpYSBxdeG6o24gdHLhu4ssIGzhuq1wIGvhur8gaG/huqFjaCB2w6AgcmEgcXV54bq/dCDEkeG7i25oLiDDgXAgxJHhurd0IChBKSBoYXkgdGh1w6ogbmdvw6BpIGzDoG0gdGhheSAoQykgY8OgbmcgbMOgbSBt4bqldCBraeG7g20gc2/DoXQuIiwgIm9uIjogInNsaWRlIDI5LCAzMSAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIyOCI6IHsiayI6ICJBIiwgImUiOiAiSGFpIGjhu4cgdGjhu5FuZyBjw7luZyBjaOG7qWMgbsSDbmcgbMOgIHTDoGkgbmd1ecOqbiB0csO5bmcgbOG6t3Ag4oCTIFwicXXhuqMgbmfhu410IGThu4UgaMOhaVwiLCBnaeG7kW5nIHTDrG5oIGh14buRbmcgRE1DIGfhu5lwIGhhaSBo4buHIHRo4buRbmcuIEdp4bqjbSBuaMOibiBz4buxIHRyb25nIHF1eSB0csOsbmggKEMpIGxpw6puIHF1YW4gxJHhur9uIEJQUi9CUEkuIiwgIm9uIjogInNsaWRlIDM4LCA1NyAoYsOgaSBnaeG6o25nIELDoGkgMuKAkzMpIn0sICIyOSI6IHsiayI6ICJDIiwgImUiOiAiVGjGsOG7m2MgxJFvIHBo4bqjaSDEkeG7i25oIGzGsOG7o25nIMSRxrDhu6NjIHbDoCBjaG8gYmnhur90IGtoaSBuw6BvIG3hu6VjIHRpw6p1IMSR4bqhdC4gQSwgQiwgRCDEkeG7gXUgbMOgIHPDoW5nIGtp4bq/biDigJMgY8OhYyB2aeG7h2MgbMOgbSDEkeG7gyDEkeG6oXQgbeG7pWMgdGnDqnUuIiwgIm9uIjogInNsaWRlIDY4IChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifSwgIjMwIjogeyJrIjogIkIiLCAiZSI6ICJUaGVvIEVBID0gUyDihpIgQiDihpAgVCwgY8O0bmcgbmdo4buHIGtow7RuZyBk4bqrbiBk4bqvdCBr4bq/IGhv4bqhY2g7IHBo4bqjaSByw7UgbeG7pWMgdGnDqnUgY2hp4bq/biBsxrDhu6NjIHbDoCBiw6BpIHRvw6FuIG5naGnhu4dwIHbhu6UgdHLGsOG7m2MuIEMgY8Wpbmcgc2FpOiBFQSBraMO0bmcgY2jhu5FuZyBjw7RuZyBuZ2jhu4cgbeG7m2ksIGNo4buJIMSR4bq3dCBuw7MgxJHDum5nIHRo4bupIHThu7EuIiwgIm9uIjogInNsaWRlIDcwIChiw6BpIGdp4bqjbmcgQsOgaSAy4oCTMykifX0="), c => c.charCodeAt(0))));
+const LET = ["A","B","C","D"];
+const QMAP = {}; Q.forEach(q => QMAP[q.n] = q);
+const GMAP = {}; GROUPS.forEach(g => GMAP[g.id] = g);
+
+/* ====== LƯU TRỮ AN TOÀN ====== */
+const LS = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const STORE = CFG.store + "_state_v1", KEYSTORE = "quiz_gemini_key", MODELSTORE = "quiz_gemini_model";
+let SAVE_ENABLED = true;
+
+/* ====== TRẠNG THÁI ====== */
+let state = { mode:"full", answers:{}, graded:false, result:null, info:{hoTen:"",maSV:"",lop:""}, ai:null };
+function loadState(){
+  const raw = LS.get(STORE); if(!raw) return;
+  try{ const s = JSON.parse(raw); if(s && typeof s === "object") state = Object.assign(state, s); }catch(e){}
+}
+function saveState(){ if(SAVE_ENABLED) LS.set(STORE, JSON.stringify(state)); }
+function idsFor(mode){ return mode === "p12" ? PACK12.slice() : Q.map(q => q.n); }
+
+/* ====== CHẤM ĐIỂM (hàm thuần, chạy offline) ====== */
+function grade(answers, ids){
+  const per = []; let correct = 0;
+  const groups = {};
+  ids.forEach(n => {
+    const chosen = answers[n] || null;
+    const ok = chosen !== null && chosen === KEY[n].k;
+    if(ok) correct++;
+    QMAP[n].gs.forEach(g => {            // một câu có thể thuộc nhiều nhóm
+      if(!groups[g]) groups[g] = {total:0, correct:0, qs:[]};
+      groups[g].total++; if(ok) groups[g].correct++; groups[g].qs.push(n);
+    });
+    per.push({n, chosen, key:KEY[n].k, ok});
+  });
+  const total = ids.length;
+  const score = total ? correct * 10 / total : 0;
+  let pass = null;
+  if(PACK12.length && ids.length === PACK12.length && ids.every((n,i) => n === PACK12[i])){
+    const okSet = new Set(per.filter(p => p.ok).map(p => p.n));
+    const missing = PACK12_RULE.need.filter(r => !r.q.some(n => okSet.has(n))).map(r => r.name);
+    pass = { ok: correct >= PACK12_RULE.min && missing.length === 0, missing };
+  }
+  return { per, correct, total, score, groups, pass };
+}
+function fmtScore(x){ const r = Math.round(x * 100) / 100; return r.toLocaleString("vi-VN", {maximumFractionDigits:2}); }
+
+/* ====== DỰNG GIAO DIỆN ====== */
+const $ = s => document.querySelector(s);
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function rich(s){ return esc(s).replace(/\*\*(.+?)\*\*/g, (m, t) => "<b>" + t + "</b>"); }
+
+const SMALL = new Set(CFG.small || []);
+function figHTML(id, alt){
+  if(!id || !IMG[id]) return "";
+  const small = SMALL.has(id);
+  // Hình rộng giữ tối thiểu FIG_SCALE kích thước gốc để chữ trong hình đọc được trên điện thoại;
+  // khi màn hình hẹp hơn, hình vuốt ngang bên trong khung (trang không bị cuộn ngang).
+  const w = (CFG.imgw || {})[id], mw = w ? Math.round(w * FIG_SCALE) : 0;
+  return `<div class="fig${small ? " small" : ""}" data-img="${id}" role="button" tabindex="0" aria-label="Phóng to hình"><div class="figscroll"><img src="${IMG[id]}" alt="${esc(alt)}" decoding="async"${mw ? ` style="min-width:${mw}px"` : ""}></div><p class="hint">← Vuốt ngang để xem hết hình →</p><span class="zoom" aria-hidden="true">⤢</span></div>`;
+}
+const FIG_SCALE = 0.42;
+function markWide(){ document.querySelectorAll(".fig").forEach(f => { const sc = f.querySelector(".figscroll"); f.classList.toggle("wide", !!sc && sc.scrollWidth > sc.clientWidth + 2); }); }
+window.addEventListener("resize", markWide); window.addEventListener("load", markWide);
+
+function renderQuestions(){
+  const ids = idsFor(state.mode);
+  const box = $("#qs"); box.innerHTML = "";
+  ids.forEach((n, idx) => {
+    const q = QMAP[n];
+    if(q.part && state.mode !== "p12"){ const h = document.createElement("h2"); h.className = "part"; h.textContent = q.part; box.appendChild(h); }
+    const sec = document.createElement("section");
+    sec.className = "card q"; sec.id = "q" + n;
+    sec.innerHTML =
+      `<span class="gtag">${q.gs.map(g => esc(GMAP[g].name)).join(" · ")}</span>
+       <p class="stem"><span class="num">Câu ${n}.</span> ${rich(q.t)}<span class="rtag"></span></p>
+       ${q.f ? figHTML(q.f, "Hình câu " + n) : ""}
+       <div class="opts" role="radiogroup" aria-label="Phương án câu ${n}">
+         ${q.o.map((o,i) => `<label class="opt" data-l="${LET[i]}"><input type="radio" name="a${n}" value="${LET[i]}"><span class="L">${LET[i]}</span><span class="tx">${esc(o)}</span></label>`).join("")}
+       </div>
+       <div class="fbw"></div>`;
+    box.appendChild(sec);
+    const a = state.answers[n];
+    if(a){ const r = sec.querySelector(`input[value="${a}"]`); if(r){ r.checked = true; r.closest(".opt").classList.add("sel"); } }
+  });
+  updateProgress();
+  if(state.graded && state.result) showGraded(state.result);
+  markWide();
+}
+
+function updateProgress(){
+  const ids = idsFor(state.mode);
+  const done = ids.filter(n => state.answers[n]).length;
+  $("#progTxt").textContent = state.graded ? `Đã chấm: ${state.result.correct}/${state.result.total} câu đúng` : `Đã làm ${done}/${ids.length}`;
+  $("#progFill").style.width = (done / ids.length * 100) + "%";
+  $("#topSubmit").textContent = state.graded ? "Xem kết quả" : "Nộp bài";
+}
+
+/* ====== NỘP BÀI ====== */
+let warnedOnce = false;
+function submit(force){
+  if(state.graded){ $("#resultCard").scrollIntoView({behavior:"smooth"}); return; }
+  const ids = idsFor(state.mode);
+  const missing = ids.filter(n => !state.answers[n]);
+  if(missing.length && !force && !warnedOnce){
+    warnedOnce = true;
+    const w = $("#submitWarn");
+    w.innerHTML = `Còn ${missing.length} câu chưa chọn: ${missing.map(n => `<a href="#q${n}">Câu ${n}</a>`).join(", ")}. Câu bỏ trống tính là sai. Bấm <b>Nộp bài</b> lần nữa để nộp luôn.`;
+    w.classList.remove("hidden");
+    w.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  const res = grade(state.answers, ids);
+  state.graded = true; state.result = res; state.ai = null;
+  saveState();
+  showGraded(res);
+  $("#submitWarn").classList.add("hidden");
+  $("#resultCard").scrollIntoView({behavior:"smooth"});
+}
+
+function showGraded(res){
+  document.body.classList.add("graded");
+  document.querySelectorAll("#qs input").forEach(i => i.disabled = true);
+  res.per.forEach(p => {
+    const sec = document.getElementById("q" + p.n); if(!sec) return;
+    sec.classList.add(p.ok ? "r-ok" : "r-bad");
+    sec.querySelector(".rtag").innerHTML = p.ok ? `<span class="tag ok">✓ Đúng</span>` : (p.chosen ? `<span class="tag bad">✗ Sai</span>` : `<span class="tag skip">○ Bỏ trống</span>`);
+    sec.querySelectorAll(".opt").forEach(o => {
+      o.classList.remove("sel");
+      if(o.dataset.l === p.key && !p.ok) o.classList.add("isKey");
+      if(o.dataset.l === p.key && p.ok) o.classList.add("isKey");
+      if(o.dataset.l === p.chosen && !p.ok) o.classList.add("isWrong");
+    });
+    if(!p.ok){
+      const k = KEY[p.n];
+      const af = k.af ? figHTML(k.af, "Hình đáp án câu " + p.n) + `<p class="cap">Hình đáp án: ${esc(k.afc)}</p>` : "";
+      sec.querySelector(".fbw").innerHTML =
+        `<div class="fb"><p style="margin:0 0 6px">${p.chosen ? `Em chọn <b>${p.chosen}</b>. ` : "Em bỏ trống. "}Đáp án đúng: <b class="k">${p.key}</b></p>
+         <p style="margin:0">${esc(k.e)}</p>${af}
+         <p class="cap">Ôn lại: ${esc(k.on || QMAP[p.n].gs.map(g => GMAP[g].ref).join("; "))}</p></div>`;
+    }
+  });
+  renderResult(res);
+  updateProgress(); markWide();
+  $("#submitBox").classList.add("hidden");
+  $("#aiResult").classList.remove("hidden"); updateAIState();
+  $("#aiHint").textContent = res.correct === res.total ? "Em đúng hết. AI vẫn có thể gợi ý bài nâng cao cho tuần tới." : `AI sẽ giải thích ${res.total - res.correct} câu sai và gợi ý việc luyện tuần tới.`;
+  if(state.ai) renderAI(state.ai);
+}
+
+function renderResult(res){
+  const box = $("#resultCard");
+  const gids = GROUPS.map(g => g.id).filter(id => res.groups[id]);
+  const bars = gids.map(id => {
+    const g = res.groups[id], pct = Math.round(g.correct / g.total * 100);
+    return `<div class="bar" title="${esc(GMAP[id].name)}: ${g.correct}/${g.total} câu đúng (${pct}%)">
+      <div class="lab"><span>${esc(GMAP[id].name)}${pct < 50 ? `<span class="need">· cần ôn</span>` : ""}</span><span>${g.correct}/${g.total} · ${pct}%</span></div>
+      <div class="tr" role="img" aria-label="${esc(GMAP[id].name)} ${pct} phần trăm"><div class="fi" style="width:${pct}%"></div><div class="tick"></div></div></div>`;
+  }).join("");
+  const wrong = res.per.filter(p => !p.ok);
+  const P = PACK12.length;
+  const passHTML = res.pass ? (res.pass.ok ? `<span class="pass y">✓ Đạt tiêu chí gói ${P} câu</span>`
+      : `<span class="pass n">✗ Chưa đạt tiêu chí gói ${P} câu</span><p class="note" style="margin:6px 0 0">Cần ≥ ${PACK12_RULE.min}/${P} câu đúng${PACK12_RULE.need.length ? " và đúng ít nhất một câu ở mỗi nhóm " + PACK12_RULE.need.map(r => r.name).join(", ") : ""}${res.pass.missing.length ? "; còn thiếu: " + res.pass.missing.join(", ") : ""}.</p>`) : "";
+  const info = state.info;
+  box.innerHTML = `
+    <h2>Kết quả</h2>
+    ${(info.hoTen || info.maSV || info.lop) ? `<p class="note" style="margin:0 0 8px">${esc([info.hoTen, info.maSV, info.lop].filter(Boolean).join(" · "))}</p>` : ""}
+    <div class="score"><span class="big" id="scoreVal">${fmtScore(res.score)}</span><span class="of">/ 10 điểm</span>
+      <span class="of" id="scoreCount">· ${res.correct}/${res.total} câu đúng</span></div>
+    ${passHTML}
+    <h3 style="margin-top:18px">Kết quả theo ${esc(CFG.groups_label)}</h3>
+    <div class="chart" id="chart">${bars}</div>
+    <p class="legend">Thanh cho biết tỉ lệ câu đúng trong từng nhóm. ${CFG.multi_group ? "Một câu có thể thuộc nhiều nhóm nên được tính ở mọi nhóm đó. " : ""}Vạch mờ đánh dấu mốc 70%; nhóm dưới 50% được ghi “cần ôn”.</p>
+    ${wrong.length ? `<h3 style="margin-top:14px">Câu cần xem lại (${wrong.length})</h3>
+      <div class="wrong-list">${wrong.map(p => `<div><a href="#q${p.n}">Câu ${p.n}</a> — ${p.chosen ? `em chọn ${p.chosen}` : "em bỏ trống"}, đáp án đúng <b>${p.key}</b></div>`).join("")}</div>`
+      : `<p class="okmsg">Em trả lời đúng tất cả các câu. Rất tốt!</p>`}
+    <div class="row noprint" style="margin-top:16px">
+      <button type="button" id="copyRes">Sao chép kết quả</button>
+      <button type="button" id="printRes">In / lưu PDF</button>
+      <button type="button" id="redo">Làm lại từ đầu</button>
+    </div>
+    <div id="copyMsg"></div>`;
+  box.classList.remove("hidden");
+  $("#copyRes").onclick = copyResult;
+  $("#printRes").onclick = () => window.print();
+  $("#redo").onclick = resetAll;
+}
+
+function resultText(){
+  const r = state.result, i = state.info;
+  const lines = [
+    "KẾT QUẢ: " + CFG.result_title,
+    `Họ tên: ${i.hoTen || "-"} | Mã SV: ${i.maSV || "-"} | Lớp: ${i.lop || "-"}`,
+    `Bộ câu: ${modeLabel(state.mode)}`,
+    `Điểm: ${fmtScore(r.score)}/10 (${r.correct}/${r.total} câu đúng)` + (r.pass ? ` — ${r.pass.ok ? "ĐẠT" : "CHƯA ĐẠT"}` : ""),
+    "Theo " + CFG.groups_label + ": " + GROUPS.filter(g => r.groups[g.id]).map(g => `${g.name} ${r.groups[g.id].correct}/${r.groups[g.id].total}`).join("; "),
+    "Bài làm: " + r.per.map(p => `${p.n}${p.chosen || "-"}${p.ok ? "" : "✗"}`).join(" "),
+    "Thời điểm nộp: " + new Date().toLocaleString("vi-VN")
+  ];
+  return lines.join("\n");
+}
+async function copyResult(){
+  const t = resultText(); let ok = false;
+  try{ await navigator.clipboard.writeText(t); ok = true; }catch(e){
+    try{ const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove(); }catch(e2){}
+  }
+  $("#copyMsg").innerHTML = ok ? `<p class="okmsg">Đã sao chép. Dán vào tin nhắn/biểu mẫu để gửi giảng viên.</p>` : `<pre class="mono">${esc(t)}</pre>`;
+}
+
+function resetAll(){
+  state.answers = {}; state.graded = false; state.result = null; state.ai = null; warnedOnce = false;
+  saveState();
+  document.body.classList.remove("graded");
+  $("#resultCard").classList.add("hidden"); $("#resultCard").innerHTML = "";
+  $("#submitBox").classList.remove("hidden"); $("#submitWarn").classList.add("hidden");
+  $("#aiOut").innerHTML = ""; $("#aiResult").classList.add("hidden");
+  clearKey(); // máy dùng chung: không để key sang lượt làm bài sau
+  renderQuestions();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ====== SỰ KIỆN ====== */
+$("#qs").addEventListener("change", e => {
+  const t = e.target; if(!t.name || !t.name.startsWith("a") || state.graded) return;
+  state.answers[+t.name.slice(1)] = t.value; saveState(); updateProgress();
+  t.closest(".opts").querySelectorAll(".opt").forEach(o => o.classList.toggle("sel", o.contains(t)));
+});
+$("#submitBtn").onclick = () => submit(false);
+$("#topSubmit").onclick = () => submit(false);
+function modeLabel(mode){ return mode === "p12" ? `gói ${PACK12.length} câu` : `đủ ${Q.length} câu`; }
+function renderModes(){
+  if(!PACK12.length) return;
+  const seg = $("#modeSeg");
+  seg.innerHTML = `<label><input type="radio" name="mode" value="full"><span><b>Đủ ${Q.length} câu</b><small>${esc(CFG.full_time || "")}</small></span></label>
+    <label><input type="radio" name="mode" value="p12"><span><b>${esc(CFG.pack_label || "Gói rút gọn")}</b><small>${esc(CFG.pack_time || "")}</small></span></label>`;
+  seg.classList.remove("hidden");
+  seg.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener("change", () => {
+    if(state.graded){ state.mode = r.value; resetAll(); return; }   // đổi bộ câu sau khi nộp => làm lại
+    state.mode = r.value; warnedOnce = false; saveState(); renderQuestions();
+  }));
+}
+function setModeRadio(){ const r = document.querySelector(`input[name="mode"][value="${state.mode}"]`); if(r) r.checked = true; }
+function renderLegend(){
+  if(!CFG.legend_html) return;
+  const box = $("#legendCard");
+  box.innerHTML = CFG.legend_html.replace(/\{\{IMG:(\d+)(?:\|([^}]*))?\}\}/g, (m, id, alt) => figHTML(+id, alt || "Hình quy ước"));
+  box.classList.remove("hidden"); markWide();
+}
+["hoTen","maSV","lop"].forEach(id => $("#" + id).addEventListener("input", e => { state.info[id] = e.target.value.trim(); saveState(); }));
+
+/* phóng to hình */
+function openLB(id){
+  const im = $("#lbImg"); im.src = IMG[id];
+  im.style.width = Math.max(window.innerWidth * (window.innerWidth < 700 ? 1.8 : 1), 300) + "px";
+  $("#lb").classList.remove("hidden"); document.body.style.overflow = "hidden"; $("#lbClose").focus();
+}
+function closeLB(){ $("#lb").classList.add("hidden"); document.body.style.overflow = ""; }
+let swipeX = null;
+document.addEventListener("pointerdown", e => { swipeX = e.clientX; }, true);
+document.addEventListener("click", e => { const f = e.target.closest(".fig"); if(!f) return; if(swipeX !== null && Math.abs(e.clientX - swipeX) > 8) return; openLB(f.dataset.img); });
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape") closeLB();
+  if((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("fig")){ e.preventDefault(); openLB(e.target.dataset.img); }
+});
+$("#lbClose").onclick = closeLB;
+
+/* ====== GEMINI ====== */
+const API = "https://generativelanguage.googleapis.com/v1beta";
+let API_KEY = "";               // chỉ giữ trong bộ nhớ, không ghi localStorage
+function getKey(){ return API_KEY; }
+function keyMsg(html, cls){ $("#keyMsg").innerHTML = html ? `<div class="${cls}">${html}</div>` : ""; }
+function keyState(text, cls){ const e = $("#keyState"); e.textContent = text || ""; e.className = "keystate " + (cls || "wait"); }
+$("#showKey").onclick = () => { const i = $("#apiKey"); const show = i.type === "password"; i.type = show ? "text" : "password"; $("#showKey").textContent = show ? "Ẩn" : "Hiện"; $("#showKey").setAttribute("aria-pressed", show); };
+$("#apiKey").addEventListener("input", () => {
+  const v = $("#apiKey").value.trim();
+  if(API_KEY && v !== API_KEY) keyState("Key đã thay đổi — bấm Lưu để dùng key mới.", "wait");
+  else if(API_KEY) keyState("✓ Đã lưu cho phiên này.", "ok");
+  else keyState("", "wait");
+});
+$("#apiKey").addEventListener("keydown", e => { if(e.key === "Enter"){ e.preventDefault(); $("#saveKey").click(); } });
+$("#model").onchange = e => { LS.set(MODELSTORE, e.target.value); updateAIState(); };
+function clearKey(){ API_KEY = ""; $("#apiKey").value = ""; $("#apiKey").type = "password"; $("#showKey").textContent = "Hiện"; keyState(""); keyMsg(""); updateAIState(); }
+
+function friendlyError(status, body){
+  const m = (body && body.error && body.error.message) || "";
+  if(!navigator.onLine) return "Thiết bị đang không có mạng. Phần chấm điểm vẫn dùng được; khi có mạng hãy thử lại phần AI.";
+  if(status === 400 && /API key/i.test(m)) return "Key không hợp lệ. Kiểm tra lại đã dán đủ cả chuỗi chưa (không thừa dấu cách).";
+  if(status === 400 && /location|region|country/i.test(m)) return "Gemini API chưa hỗ trợ ở khu vực mạng hiện tại.";
+  if(status === 403) return "Key không có quyền dùng Gemini API (có thể key bị khoá hoặc chưa bật API). Thử tạo key mới trong AI Studio.";
+  if(status === 404) return "Không tìm thấy mô hình này. Bấm “Lưu API key” ở đầu trang để tải lại danh sách mô hình, rồi chọn lại.";
+  if(status === 429) return "Đã hết lượt miễn phí tạm thời. Đợi khoảng một phút (hoặc sang ngày) rồi thử lại.";
+  if(status >= 500) return "Máy chủ Gemini đang bận. Thử lại sau ít phút.";
+  return "Lỗi khi gọi Gemini" + (status ? ` (mã ${status})` : "") + (m ? ": " + m : ".");
+}
+async function gfetch(url, opts, ms){
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 90000);
+  try{
+    const r = await fetch(url, Object.assign({}, opts, {signal: ctl.signal}));
+    let body = null; try{ body = await r.json(); }catch(e){}
+    return {status: r.status, ok: r.ok, body};
+  }catch(e){
+    return {status: 0, ok: false, body: {error: {message: e.name === "AbortError" ? "Quá thời gian chờ." : "Không kết nối được tới máy chủ."}}};
+  }finally{ clearTimeout(t); }
+}
+
+const MODEL_LABELS = {"gemini-flash-lite-latest":"Gemini Flash-Lite — miễn phí, nhẹ & nhanh nhất","gemini-flash-latest":"Gemini Flash — giải thích kỹ hơn, vẫn miễn phí"};
+function fillModels(list){
+  const sel = $("#model"), cur = sel.value;
+  const known = Object.keys(MODEL_LABELS).filter(n => !list || list.includes(n));
+  const others = (list || []).filter(n => !MODEL_LABELS[n] && /flash|pro/i.test(n)).sort().reverse();
+  sel.innerHTML = known.map(n => `<option value="${n}">${esc(MODEL_LABELS[n])}</option>`).join("")
+    + (others.length ? `<optgroup label="Mô hình khác key này dùng được">${others.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join("")}</optgroup>` : "");
+  const all = [...sel.options].map(o => o.value);
+  sel.value = all.includes(cur) ? cur : (all.find(n => /flash-lite/i.test(n)) || all[0]);
+  LS.set(MODELSTORE, sel.value);
+}
+$("#saveKey").onclick = async () => {
+  const key = $("#apiKey").value.trim();
+  if(!key){ keyState("Hãy dán API key vào ô trước.", "bad"); keyMsg(""); return; }
+  if(/\s/.test(key)){ keyState("Key có khoảng trắng ở giữa — kiểm tra lại khi dán.", "bad"); return; }
+  $("#saveKey").disabled = true; keyMsg("");
+  keyState("Đang kiểm tra key…", "wait");
+  if(!navigator.onLine){
+    API_KEY = key; $("#saveKey").disabled = false;
+    keyState("✓ Đã lưu cho phiên này (chưa kiểm tra được vì không có mạng).", "ok"); updateAIState(); return;
+  }
+  const r = await gfetch(`${API}/models?pageSize=200`, {headers: {"x-goog-api-key": key}}, 20000);
+  $("#saveKey").disabled = false;
+  if(r.ok){
+    const models = ((r.body && r.body.models) || [])
+      .filter(m => (m.supportedGenerationMethods || []).includes("generateContent"))
+      .map(m => m.name.replace(/^models\//, ""))
+      .filter(n => /gemini/i.test(n) && !/(image|tts|audio|live|embedding|vision|aqa|robotics|computer)/i.test(n));
+    if(models.length) fillModels(models);
+    API_KEY = key; keyState("✓ Đã lưu cho phiên này.", "ok");
+  }else if(r.status === 0){
+    API_KEY = key; keyState("✓ Đã lưu cho phiên này (chưa kiểm tra được với Google).", "ok");
+  }else{
+    API_KEY = ""; keyState("Chưa lưu.", "bad"); keyMsg(esc(friendlyError(r.status, r.body)), "err");
+  }
+  updateAIState();
+};
+function updateAIState(){
+  const st = $("#aiKeyState"); if(!st) return;
+  const lab = $("#model").selectedOptions[0] ? $("#model").selectedOptions[0].textContent.split(" — ")[0] : $("#model").value;
+  st.innerHTML = API_KEY ? `Đang dùng key đã lưu ở đầu trang · mô hình <b>${esc(lab)}</b>.`
+    : `Chưa có API key. <a href="#aiSetup">Nhập key ở mục “Trợ lý AI Gemini” đầu trang</a> rồi quay lại đây.`;
+  $("#askAI").disabled = !state.graded;
+}
+
+const SYS = CFG.sys + `
+
+Chỉ trả về MỘT đối tượng JSON hợp lệ, không kèm chữ nào khác, theo đúng cấu trúc:
+{
+ "nhan_xet_chung": "2-3 câu nhận xét tổng quát, động viên, nêu điểm mạnh và lỗ hổng chính",
+ "giai_thich": [
+   {"cau": <số câu>,
+    "vi_sao_sai": "chỉ ra chính xác nhầm lẫn khiến em chọn phương án đó (hoặc vì sao bỏ trống là mất điểm), 1-3 câu",
+    "quy_tac": "quy tắc, định nghĩa hoặc khái niệm của buổi áp dụng, phát biểu ngắn gọn",
+    "vi_du": "${CFG.ai_vi_du}",
+    "meo_nho": "một mẹo ngắn để không nhầm lần sau"}
+ ],
+ "ke_hoach_tuan_toi": {
+   "uu_tien": ["tên nhóm cần luyện nhất", "..."],
+   "viec_can_lam": [
+     {"buoi": "Thứ 2 (hoặc Ngày 1)", "noi_dung": "việc cụ thể, có tham chiếu slide/bài tập được cung cấp", "thoi_luong": "ví dụ 20 phút", "dau_hieu_hoan_thanh": "làm sao biết đã đạt"}
+   ],
+   "bai_tu_luyen": "${CFG.ai_bai_tu_luyen}"
+ }
+}
+Mỗi câu sai/bỏ trống phải có đúng một phần tử trong "giai_thich", theo thứ tự số câu. Kế hoạch gồm 4-6 việc, tổng khoảng 2-3 giờ trong tuần, ưu tiên nhóm có tỉ lệ đúng thấp nhất.`;
+
+function buildPrompt(){
+  const r = state.result;
+  const stats = GROUPS.filter(g => r.groups[g.id]).map(g => {
+    const x = r.groups[g.id]; return `- ${g.name}: ${x.correct}/${x.total} đúng (${Math.round(x.correct / x.total * 100)}%). Tài liệu ôn: ${g.ref}`;
+  }).join("\n");
+  const wrong = r.per.filter(p => !p.ok).map(p => {
+    const q = QMAP[p.n], k = KEY[p.n];
+    return `### Câu ${p.n} (nhóm: ${q.gs.map(g => GMAP[g].name).join("; ")})
+Đề: ${q.t.replace(/\*\*/g, "")}${q.f ? " [câu có hình; nội dung hình được mô tả trong đề và lời giải]" : ""}
+${q.o.map((o,i) => `${LET[i]}. ${o}`).join("\n")}
+Học sinh chọn: ${p.chosen || "(bỏ trống)"}
+Đáp án đúng: ${p.key}
+Lời giải của giảng viên: ${k.e}${k.afc ? "\nHình đáp án: " + k.afc : ""}`;
+  }).join("\n\n");
+  return `Bài làm: ${CFG.result_title}, ${modeLabel(state.mode)}; đúng ${r.correct}/${r.total}; điểm ${fmtScore(r.score)}/10.
+
+Tỉ lệ đúng theo ${CFG.groups_label}:
+${stats}
+
+${wrong ? "Các câu sai hoặc bỏ trống:\n\n" + wrong : "Học sinh đúng tất cả. Mảng giai_thich để rỗng; kế hoạch tuần tới hãy gợi ý luyện nâng cao (" + CFG.ai_advanced + ")."}`;
+}
+
+function parseJSON(text){
+  let t = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
+  try{ return JSON.parse(t); }catch(e){}
+  const a = t.indexOf("{"), b = t.lastIndexOf("}");
+  if(a >= 0 && b > a){ try{ return JSON.parse(t.slice(a, b + 1)); }catch(e){} }
+  return null;
+}
+
+$("#askAI").onclick = async () => {
+  const out = $("#aiOut");
+  if(!state.graded){ out.innerHTML = `<div class="err">Hãy nộp bài trước.</div>`; return; }
+  const key = getKey();
+  if(!key){ out.innerHTML = `<div class="err">Chưa có API key. Lên mục “Trợ lý AI Gemini” ở đầu trang, dán key và bấm <b>Lưu API key</b>, rồi quay lại bấm nút này.</div>`; $("#howKey").open = true; $("#aiSetup").scrollIntoView({behavior:"smooth"}); return; }
+  if(!navigator.onLine){ out.innerHTML = `<div class="err">${friendlyError(0)}</div>`; return; }
+  const model = $("#model").value || "gemini-flash-lite-latest";
+  $("#askAI").disabled = true;
+  out.innerHTML = `<p class="note"><span class="spinner"></span>AI đang đọc bài làm (thường 10–40 giây)…</p>`;
+  const body = {
+    systemInstruction: {parts: [{text: SYS}]},
+    contents: [{role: "user", parts: [{text: buildPrompt()}]}],
+    generationConfig: {temperature: 0.4, responseMimeType: "application/json"}
+  };
+  const r = await gfetch(`${API}/models/${encodeURIComponent(model)}:generateContent`, {
+    method: "POST", headers: {"Content-Type": "application/json", "x-goog-api-key": key}, body: JSON.stringify(body)
+  }, 120000);
+  $("#askAI").disabled = false;
+  if(!r.ok){ out.innerHTML = `<div class="err">${esc(friendlyError(r.status, r.body))}</div>`; return; }
+  const cand = r.body && r.body.candidates && r.body.candidates[0];
+  const text = cand && cand.content && (cand.content.parts || []).filter(p => !p.thought && p.text).map(p => p.text).join("");
+  if(!text){
+    const why = (r.body && r.body.promptFeedback && r.body.promptFeedback.blockReason) || (cand && cand.finishReason) || "";
+    out.innerHTML = `<div class="err">AI không trả lời${why ? " (" + esc(why) + ")" : ""}. Thử bấm lại.</div>`; return;
+  }
+  const data = parseJSON(text);
+  state.ai = data ? {json: data} : {raw: text};
+  saveState();
+  renderAI(state.ai);
+};
+
+function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+function renderAI(ai){
+  const out = $("#aiOut"); out.innerHTML = "";
+  if(ai.raw){ out.appendChild(el("h3", null, "Phản hồi của AI")); out.appendChild(el("pre", "mono", ai.raw)); return; }
+  const d = ai.json || {};
+  out.appendChild(el("h3", null, "Nhận xét của trợ giảng AI"));
+  if(d.nhan_xet_chung) out.appendChild(el("p", null, d.nhan_xet_chung));
+  const items = Array.isArray(d.giai_thich) ? d.giai_thich : [];
+  if(items.length) out.appendChild(el("h3", null, "Giải thích từng lỗi"));
+  items.forEach(it => {
+    const box = el("div", "ai-item");
+    const n = +it.cau; const p = state.result.per.find(x => x.n === n);
+    box.appendChild(el("h4", null, `Câu ${it.cau}` + (p ? ` — em chọn ${p.chosen || "(trống)"}, đúng là ${p.key}` : "")));
+    const dl = el("dl");
+    [["Vì sao sai", it.vi_sao_sai], ["Quy tắc áp dụng", it.quy_tac], ["Ví dụ", it.vi_du], ["Mẹo nhớ", it.meo_nho]].forEach(([k, v]) => {
+      if(!v) return; dl.appendChild(el("dt", null, k)); dl.appendChild(el("dd", null, String(v)));
+    });
+    box.appendChild(dl); out.appendChild(box);
+  });
+  const plan = d.ke_hoach_tuan_toi;
+  if(plan){
+    out.appendChild(el("h3", null, "Việc cần luyện tuần tới"));
+    if(Array.isArray(plan.uu_tien) && plan.uu_tien.length) out.appendChild(el("p", null, "Ưu tiên: " + plan.uu_tien.join(" → ")));
+    const ol = el("ol", "plan");
+    (plan.viec_can_lam || []).forEach(v => {
+      const li = el("li");
+      li.appendChild(el("b", null, [v.buoi, v.thoi_luong].filter(Boolean).join(" · ") + ": "));
+      li.appendChild(document.createTextNode(v.noi_dung || ""));
+      if(v.dau_hieu_hoan_thanh){ li.appendChild(el("br")); li.appendChild(el("span", "note", "Hoàn thành khi: " + v.dau_hieu_hoan_thanh)); }
+      ol.appendChild(li);
+    });
+    out.appendChild(ol);
+    if(plan.bai_tu_luyen){ const b = el("div", "ai-item"); b.appendChild(el("h4", null, "Bài tự luyện")); b.appendChild(el("p", "mono", plan.bai_tu_luyen)); out.appendChild(b); }
+  }
+  out.appendChild(el("p", "note", "Nội dung do AI tạo, có thể sai sót. Khi AI và lời giải của giảng viên khác nhau, lấy lời giải của giảng viên làm chuẩn."));
+}
+
+/* ====== KHỞI ĐỘNG ====== */
+function init(){
+  loadState();
+  LS.del(KEYSTORE); // xoá key do bản cũ có thể đã ghi nhớ
+  $("#apiKey").value = ""; // chặn trình duyệt tự điền lại sau khi tải lại trang
+  const m = LS.get(MODELSTORE); if(m){ const sel = $("#model"); if(![...sel.options].some(o => o.value === m)) sel.add(new Option(m, m)); sel.value = m; }
+  updateAIState();
+  if(!PACK12.length) state.mode = "full";
+  renderModes(); setModeRadio(); renderLegend();
+  ["hoTen","maSV","lop"].forEach(id => $("#" + id).value = state.info[id] || "");
+  renderQuestions();
+  if(location.hash === "#kiemtra") runSelfTest();
+}
+
+/* ====== CHẾ ĐỘ TỰ KIỂM TRA CHO GIẢNG VIÊN: mở file với đuôi #kiemtra ====== */
+function runSelfTest(){
+  SAVE_ENABLED = false;
+  const saved = JSON.parse(JSON.stringify(state));
+  const rows = []; const T = (name, ok, detail) => rows.push({name, ok, detail: detail || ""});
+  const all = Q.map(q => q.n), N = all.length, flip = k => LET[(LET.indexOf(k) + 1) % 4];
+  // 1. Dữ liệu so với phiếu
+  T(`Có đủ ${N} câu, đánh số 1–${N}`, N === CFG.n && all.every((n,i) => n === i + 1));
+  T("Mỗi câu có 4 phương án và đáp án thuộc A–D", Q.every(q => q.o.length === 4 && LET.includes(KEY[q.n].k)));
+  const keyStr = all.map(n => KEY[n].k).join("");
+  if(CFG.doc_key) T("Đáp án trong file khớp chuỗi/bảng đáp án của phiếu", keyStr === CFG.doc_key, keyStr);
+  if(CFG.dist){ const dist = LET.map(L => all.filter(n => KEY[n].k === L).length).join(",");
+    T(`Phân bố đáp án khớp phiếu (A,B,C,D = ${CFG.dist})`, dist === CFG.dist, dist); }
+  if(PACK12.length && CFG.pack_key) T("Đáp án gói rút gọn khớp phiếu", PACK12.map(n => KEY[n].k).join("") === CFG.pack_key, PACK12.map(n => KEY[n].k).join(""));
+  T("Mọi hình đề, hình đáp án, hình quy ước đều có trong file",
+    Q.every(q => !q.f || IMG[q.f]) && all.every(n => !KEY[n].af || IMG[KEY[n].af]) &&
+    [...(CFG.legend_html || "").matchAll(/\{\{IMG:(\d+)/g)].every(m => IMG[m[1]]));
+  T("Mỗi câu thuộc ít nhất một nhóm có thật", Q.every(q => q.gs.length > 0 && q.gs.every(g => GMAP[g])));
+  if(CFG.cov) T("Câu thuộc từng nhóm khớp bảng phủ của phiếu",
+    GROUPS.every(g => JSON.stringify(Q.filter(q => q.gs.includes(g.id)).map(q => q.n)) === JSON.stringify(CFG.cov[g.id] || [])));
+  // 2. Chấm điểm thuần, từng bộ câu
+  const modes = PACK12.length ? ["full", "p12"] : ["full"];
+  modes.forEach(mode => {
+    const ids = idsFor(mode), M = ids.length, label = `[${modeLabel(mode)}]`;
+    const right = {}; ids.forEach(n => right[n] = KEY[n].k);
+    const g1 = grade(right, ids);
+    T(`${label} Điền đúng hết → ${M}/${M}, 10 điểm`, g1.correct === M && g1.score === 10, `${g1.correct}/${g1.total}, ${fmtScore(g1.score)} điểm`);
+    T(`${label} Điền đúng hết → mọi nhóm 100%`, Object.values(g1.groups).every(g => g.correct === g.total));
+    if(mode === "p12") T(`${label} Điền đúng hết → Đạt tiêu chí`, !!(g1.pass && g1.pass.ok));
+    const wrong = {}; ids.forEach(n => wrong[n] = flip(KEY[n].k));
+    const g0 = grade(wrong, ids);
+    T(`${label} Điền sai hết → 0 điểm`, g0.correct === 0 && g0.score === 0);
+    T(`${label} Bỏ trống hết → 0 điểm`, grade({}, ids).score === 0);
+    const half = {}; ids.forEach((n,i) => half[n] = i % 2 ? wrong[n] : right[n]);
+    const gh = grade(half, ids), H = Math.ceil(M / 2);
+    T(`${label} Đúng ${H} câu xen kẽ → ${H}/${M}, ${fmtScore(H * 10 / M)} điểm`, gh.correct === H && Math.abs(gh.score - H * 10 / M) < 1e-9, `${gh.correct}/${gh.total}, ${fmtScore(gh.score)} điểm`);
+  });
+  if(PACK12.length && PACK12_RULE.need.length){
+    const r0 = PACK12_RULE.need[0], p = {};
+    PACK12.forEach(n => p[n] = r0.q.includes(n) ? flip(KEY[n].k) : KEY[n].k);
+    const gp = grade(p, PACK12);
+    T(`[gói] Sai hết câu nhóm ${r0.name} → Chưa đạt, báo thiếu ${r0.name}`, !!(gp.pass && !gp.pass.ok && gp.pass.missing.includes(r0.name)), gp.pass ? gp.pass.missing.join(", ") : "");
+  }
+  // 3. Từng câu: chỉ phương án đúng mới được điểm
+  const bad = [];
+  all.forEach(n => LET.forEach(L => { const g = grade({[n]: L}, [n]); if((g.correct === 1) !== (L === KEY[n].k)) bad.push(n + L); }));
+  T(`Từng câu: chỉ phương án đúng được tính điểm (${N * 4} trường hợp)`, bad.length === 0, bad.join(" "));
+  // 4. Đầu–cuối trên giao diện: bấm chọn đúng hết rồi bấm Nộp
+  modes.forEach(mode => {
+    state = {mode, answers:{}, graded:false, result:null, info:{hoTen:"",maSV:"",lop:""}, ai:null}; warnedOnce = false;
+    setModeRadio(); document.body.classList.remove("graded"); $("#submitBox").classList.remove("hidden");
+    renderQuestions();
+    const ids = idsFor(mode), M = ids.length;
+    ids.forEach(n => document.querySelector(`#q${n} input[value="${KEY[n].k}"]`).click());
+    $("#submitBtn").click();
+    const sv = $("#scoreVal") && $("#scoreVal").textContent, cnt = $("#scoreCount") && $("#scoreCount").textContent;
+    T(`[Giao diện, ${modeLabel(mode)}] Bấm chọn đúng hết + Nộp → hiện 10 / 10`, sv === "10" && cnt.includes(`${M}/${M}`), `Hiển thị: ${sv} điểm ${cnt}`);
+  });
+  // khôi phục bài đang làm
+  state = saved; SAVE_ENABLED = true; warnedOnce = false;
+  document.body.classList.remove("graded"); $("#resultCard").classList.add("hidden"); $("#aiResult").classList.add("hidden"); $("#submitBox").classList.remove("hidden");
+  setModeRadio(); renderQuestions();
+  const pass = rows.every(r => r.ok);
+  const box = $("#selftest");
+  box.innerHTML = `<h2>Tự kiểm tra chấm điểm: <span class="${pass ? "P" : "F"}">${pass ? "TẤT CẢ ĐẠT" : "CÓ LỖI"}</span> (${rows.filter(r => r.ok).length}/${rows.length})</h2>
+    <table><thead><tr><th>Kiểm tra</th><th>Kết quả</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.name)}${r.detail ? `<br><span class="note">${esc(r.detail)}</span>` : ""}</td><td class="${r.ok ? "P" : "F"}">${r.ok ? "ĐẠT" : "LỖI"}</td></tr>`).join("")}</tbody></table>
+    <p class="note">Chế độ này không ghi đè bài đang làm. Bỏ “#kiemtra” khỏi địa chỉ để trở lại bình thường.</p>`;
+  box.classList.remove("hidden");
+  window.__SELFTEST__ = {pass, rows};
+  console.log("SELFTEST", pass ? "PASS" : "FAIL", rows);
+}
+init();
+</script>
+</body>
+</html>
